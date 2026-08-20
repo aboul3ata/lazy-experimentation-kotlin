@@ -1,11 +1,11 @@
 # Lazy Experimentation for Kotlin / Android
 
-This Android library is a thin initializer around GrowthBook's official Kotlin SDK. GrowthBook owns feature fetching, caching, targeting, hashing, assignment, and exposure callbacks.
+Lazy Experimentation gives Android apps local experiment assignment, feature delivery, and outcome capture through Lazy's control plane.
 
 ```kotlin
 repositories { maven(url = "https://jitpack.io") }
 dependencies {
-    implementation("com.github.aboul3ata:lazy-experimentation-kotlin:0.1.0")
+    implementation("com.github.aboul3ata:lazy-experimentation-kotlin:0.1.1")
 }
 ```
 
@@ -19,5 +19,3 @@ val experiments = LazyExperimentation.create(
 val enabled = experiments.growthBook.featureValue<Boolean>("new-onboarding") ?: false
 experiments.capture("onboarding_completed", mapOf("steps" to 3))
 ```
-
-Official engine: [`growthbook-kotlin`](https://github.com/growthbook/growthbook-kotlin).
