@@ -15,7 +15,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - run: ./gradlew testDebugUnitTest assembleRelease
   emulator:
-    runs-on: ubuntu-latest
+    runs-on: macos-15
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
@@ -27,6 +27,6 @@ jobs:
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          arch: x86_64
+          arch: arm64-v8a
           disable-animations: true
           script: ./gradlew connectedDebugAndroidTest
