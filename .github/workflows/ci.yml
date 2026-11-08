@@ -1,10 +1,6 @@
 name: CI
 on:
   push:
-    branches:
-    - main
-    tags:
-    - v*
   pull_request:
   workflow_dispatch:
 jobs:
@@ -20,6 +16,8 @@ jobs:
         java-version: 17
         cache: gradle
     - uses: android-actions/setup-android@v3
+      with:
+        packages: platform-tools platforms;android-36 build-tools;36.0.0
     - run: ./gradlew --build-cache --parallel testDebugUnitTest
     timeout-minutes: 6
   emulator:
@@ -42,7 +40,7 @@ jobs:
         arch: x86_64
         disable-animations: true
         script: ./gradlew connectedDebugAndroidTest
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main' }}
   release:
     runs-on: ubuntu-24.04
     steps:
@@ -55,11 +53,13 @@ jobs:
         java-version: 17
         cache: gradle
     - uses: android-actions/setup-android@v3
+      with:
+        packages: platform-tools platforms;android-36 build-tools;36.0.0
     - run: ./gradlew --build-cache --parallel assembleRelease
     timeout-minutes: 10
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main' }}
 permissions:
   contents: read
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
