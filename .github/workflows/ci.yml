@@ -19,7 +19,7 @@ jobs:
       with:
         packages: platform-tools platforms;android-36 build-tools;36.0.0
     - run: ./gradlew --build-cache --parallel testDebugUnitTest
-    timeout-minutes: 6
+    timeout-minutes: ${{ github.event_name == 'pull_request' && 2 || 10 }}
   emulator:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
